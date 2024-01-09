@@ -24,6 +24,12 @@ class TicTacToe
     puts 'WELCOME TO TIC TAC TOE'
     puts '----------------------'
     puts
+    select_players
+    puts
+    puts '----------------------'
+  end
+
+  def select_players
     puts 'Who chooses X?'
     # player_x[:name] = gets.chomp
     player_x[:name] = 'Edgar'
@@ -33,8 +39,6 @@ class TicTacToe
     # player_o[:name] = gets.chomp
     player_o[:name] = 'Lucas'
     puts player_o[:name]
-    puts
-    puts '----------------------'
   end
 
   def play_game
@@ -61,18 +65,22 @@ class TicTacToe
   end
 end
 
-  def draw_board
-    puts
-    puts "#{current_player == player_x ? '>' : ' '} #{player_x[:name]}: #{player_x[:score]}"
-    puts "#{current_player == player_o ? '>' : ' '} #{player_o[:name]}: #{player_o[:score]}"
-    puts
-    puts "#{positions[0]} | #{positions[1]} | #{positions[2]}"
-    puts '--+---+---'
-    puts "#{positions[3]} | #{positions[4]} | #{positions[5]}"
-    puts '--+---+---'
-    puts "#{positions[6]} | #{positions[7]} | #{positions[8]}"
-    puts
-  end
+def draw_board
+  puts
+  draw_score
+  puts
+  puts "#{positions[0]} | #{positions[1]} | #{positions[2]}"
+  puts '--+---+---'
+  puts "#{positions[3]} | #{positions[4]} | #{positions[5]}"
+  puts '--+---+---'
+  puts "#{positions[6]} | #{positions[7]} | #{positions[8]}"
+  puts
+end
+
+def draw_score
+  puts "#{current_player == player_x ? '>' : ' '} #{player_x[:name]}: #{player_x[:score]}"
+  puts "#{current_player == player_o ? '>' : ' '} #{player_o[:name]}: #{player_o[:score]}"
+end
 
 game = TicTacToe.new
 game.start
