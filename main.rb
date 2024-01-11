@@ -2,20 +2,20 @@
 
 # The classic paper and pencil game
 class TicTacToe
-  attr_accessor :positions, :player_x, :player_o, :current_player, :winner
+  attr_accessor :player1, :player2, :current_player, :positions
 
   def initialize
-    @positions = (1..9).to_a
-    @player_x = { name: '', score: 0, symbol: 'X' }
-    @player_o = { name: '', score: 0, symbol: '0' }
-    @current_player = player_x
+    @player1 = { name: '', score: 0, symbol: '' }
+    @player2 = { name: '', score: 0, symbol: '' }
+    @current_player = player1
   end
 
   def start
+    set_game
     loop do
-      set_game # Reset variables?
+      set_round
       until winner?
-        draw_board
+        print_board
         play_turn
       end
       end_game
@@ -25,43 +25,115 @@ class TicTacToe
 
   private
 
+  # Game Flow Methods
+
   def set_game
-    puts
-    puts '----------------------'
-    puts 'WELCOME TO TIC TAC TOE'
-    puts '----------------------'
-    puts
+    print_welcome('Tic Tac Toe')
     select_players
-    puts
-    puts '----------------------'
+    print_separator
   end
 
   def select_players
-    puts 'Who chooses X?'
-    # player_x[:name] = gets.chomp
-    player_x[:name] = 'Edgar'
-    puts player_x[:name]
+    puts 'Enter the name for Player 1'
+    # player1[:name] = gets.chomp
+    player1[:name] = 'Edgar'
+    puts player1[:name]
     puts
-    puts 'Who chooses 0?'
-    # player_o[:name] = gets.chomp
-    player_o[:name] = 'Lucas'
-    puts player_o[:name]
+    puts 'Enter the name for Player 2'
+    # player2[:name] = gets.chomp
+    player2[:name] = 'Lucas'
+    puts player2[:name]
+  end
+
+  def set_round
+    self.positions = (1..9).to_a
+    select_symbol
+  end
+
+  def select_symbol
+    puts "#{current_player[:name]}, X or 0?"
+    input = gets.chomp
+    # Add input validation loop
+    case input
+    # Can these assignments be optimized?
+    when 'x'
+      current_player[:symbol] = 'X'
+      other_player[:symbol] = '0'
+    else
+      current_player[:symbol] = '0'
+      other_player[:symbol] = 'X'
+    end
+    print_separator
   end
 
   def winner?
-    calc_winner
-    # If winner is not set to nil later, this will always be true
-    winner.nil? ? false : true
+    # Calculate if current player is the winner
+    false
   end
 
-  def calc_winner
-    # Calculate and assign @winner
-    self.winner = player_x
+  def play_turn
+    puts "Pick a position #{current_player[:name]}"
+    pos = gets.chomp.to_i
+    # Add input (pos) validation loop
+    if valid_position?(pos)
+      positions[pos - 1] = current_player[:symbol]
+    else
+      puts 'Sorry, that one is not valid.' # Needs to loop
+      puts
+    end
+    self.current_player = current_player == player2 ? player1 : player2
   end
 
-  def draw_board
+  def end_game
+    update_score
+    print_board
+    puts "The winner is #{winner[:name]}!"
     puts
-    draw_score
+  end
+
+  def update_score
+    winner[:score] += 1
+  end
+
+  def play_again?
+    puts 'Do you want to play again?'
+    play_again = gets.chomp
+    # Add input (play_again) validation loop
+    case play_again
+    when 'y'
+      true
+    else
+      false
+    end
+  end
+
+  # Helper Methods
+
+  def other_player
+    current_player == player1 ? player2 : player1
+  end
+
+  def valid_position?(_pos)
+    true
+  end
+
+  # Printer Methods
+
+  def print_welcome(title)
+    puts
+    puts '----------------------'
+    puts "WELCOME TO #{title.upcase}"
+    puts '----------------------'
+    puts
+  end
+
+  def print_score
+    puts "#{current_player == player1 ? '>' : ' '} #{player1[:name]} (#{player1[:symbol]}): #{player1[:score]}"
+    puts "#{current_player == player2 ? '>' : ' '} #{player2[:name]} (#{player2[:symbol]}): #{player2[:score]}"
+  end
+
+  def print_board
+    print_score
     puts
     puts "#{positions[0]} | #{positions[1]} | #{positions[2]}"
     puts '--+---+---'
@@ -71,47 +143,10 @@ class TicTacToe
     puts
   end
 
-  def draw_score
-    puts "#{current_player == player_x ? '>' : ' '} #{player_x[:name]}: #{player_x[:score]}"
-    puts "#{current_player == player_o ? '>' : ' '} #{player_o[:name]}: #{player_o[:score]}"
-  end
-
-  def play_turn
-    puts "Pick a position #{current_player[:name]}"
-    pos = gets.chomp.to_i
-    if valid_position?(pos)
-      positions[pos - 1] = current_player[:symbol]
-    else
-      puts 'Sorry, that one is not valid.' # Needs to loop
-      puts
-    end
-    self.current_player = current_player == player_o ? player_x : player_o
-  end
-
-  def valid_position?(_pos)
-    true
-  end
-end
-
-def end_game
-  update_score
-  draw_board
-  puts "The winner is #{winner[:name]}!"
-end
-
-def update_score
-  winner[:score] += 1
-end
-
-def play_again?
-  puts 'Do you want to play again?'
-  play_again = gets.chomp
-  # Add answer validation!
-  case play_again
-  when 'y'
-    true
-  else
-    false
+  def print_separator
+    puts
+    puts '----------------------'
+    puts
   end
 end
 
