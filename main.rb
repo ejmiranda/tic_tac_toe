@@ -94,9 +94,9 @@ class TicTacToe
 end
 
 def end_game
+  update_score
   draw_board
   puts "The winner is #{winner[:name]}!"
-  update_score
 end
 
 def update_score
