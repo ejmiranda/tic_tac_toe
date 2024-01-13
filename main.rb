@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The classic paper and pencil game
-class TicTacToe
+class TicTacToe # rubocop:disable Metrics/ClassLength
   attr_accessor :player1, :player2, :current_player, :positions
 
   def initialize
@@ -46,23 +46,13 @@ class TicTacToe
   end
 
   def set_round
-    self.positions = (1..9).to_a
+    self.positions = *(1..9)
     select_symbol
   end
 
   def select_symbol
-    puts "#{current_player[:name]}, X or 0?"
-    input = gets.chomp
-    # Add input validation loop
-    case input
-    # Can these assignments be optimized?
-    when 'x'
-      current_player[:symbol] = 'X'
-      other_player[:symbol] = '0'
-    else
-      current_player[:symbol] = '0'
-      other_player[:symbol] = 'X'
-    end
+    current_player[:symbol] = get_valid_input("#{current_player[:name]}, X or 0?", %w[X 0], true)
+    other_player[:symbol] = current_player[:symbol] == 'X' ? '0' : 'X'
     print_separator
   end
 
@@ -81,7 +71,7 @@ class TicTacToe
       puts 'Sorry, that one is not valid.' # Needs to loop
       puts
     end
-    self.current_player = current_player == player2 ? player1 : player2
+    self.current_player = other_player
   end
 
   def end_game
@@ -117,6 +107,16 @@ class TicTacToe
     true
   end
 
+  def get_valid_input(prompt, valid_values, up_case)
+    puts prompt
+    loop do
+      value = up_case ? gets.chomp.upcase : gets.chomp
+      return value if valid_values.include?(value)
+
+      puts "Sorry, that\'s not valid. Please try again.\n"
+    end
+  end
+
   # Printer Methods
 
   def print_welcome(title)
@@ -127,12 +127,12 @@ class TicTacToe
     puts
   end
 
-  def print_score
+  def print_score # rubocop:disable Metrics/AbcSize
     puts "#{current_player == player1 ? '>' : ' '} #{player1[:name]} (#{player1[:symbol]}): #{player1[:score]}"
     puts "#{current_player == player2 ? '>' : ' '} #{player2[:name]} (#{player2[:symbol]}): #{player2[:score]}"
   end
 
-  def print_board
+  def print_board # rubocop:disable Metrics/AbcSize
     print_score
     puts
     puts "#{positions[0]} | #{positions[1]} | #{positions[2]}"
