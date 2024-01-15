@@ -51,7 +51,12 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   end
 
   def select_symbol
-    current_player[:symbol] = get_valid_input("#{current_player[:name]}, X or 0?", %w[X 0], true)
+    current_player[:symbol] = get_valid_input(
+      "#{current_player[:name]}, X or 0?",
+      %w[X 0],
+      "Sorry, that\'s not valid. Please try again.\n",
+      true
+    )
     other_player[:symbol] = current_player[:symbol] == 'X' ? '0' : 'X'
     print_separator
   end
@@ -107,13 +112,13 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
     true
   end
 
-  def get_valid_input(prompt, valid_values, up_case)
+  def get_valid_input(prompt, valid_values, invalid_msg, up_case)
     puts prompt
     loop do
       value = up_case ? gets.chomp.upcase : gets.chomp
       return value if valid_values.include?(value)
 
-      puts "Sorry, that\'s not valid. Please try again.\n"
+      puts invalid_msg
     end
   end
 
