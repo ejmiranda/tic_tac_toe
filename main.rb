@@ -10,13 +10,16 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
     @current_player = player1
   end
 
-  def start
+  def start # rubocop:disable Metrics/MethodLength
     set_game
     loop do
       set_round
-      until winner?
+      loop do
         print_board
         play_turn
+        break if winner?
+
+        swap_current_player
       end
       end_game
       break unless play_again?
@@ -75,31 +78,32 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
       invalid_msg: 'Sorry, that one is taken.'
     )
     positions[pos.to_i - 1] = current_player[:symbol]
-    self.current_player = other_player
     print_separator
+  end
+
+  def swap_current_player
+    self.current_player = other_player
   end
 
   def end_game
     update_score
     print_board
-    puts "The winner is #{winner[:name]}!"
+    puts "The winner is #{current_player[:name]}!"
     puts
   end
 
   def update_score
-    winner[:score] += 1
+    current_player[:score] += 1
   end
 
   def play_again?
-    puts 'Do you want to play again?'
-    play_again = gets.chomp
-    # Add input (play_again) validation loop
-    case play_again
-    when 'y'
-      true
-    else
-      false
-    end
+    input = get_valid_value(
+      prompt: 'Do you want to play again (Y/N)?',
+      valid_values: %w[Y N],
+      invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
+      up_case: true
+    )
+    input == 'Y'
   end
 
   # Helper Methods
