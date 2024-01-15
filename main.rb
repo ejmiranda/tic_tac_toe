@@ -51,7 +51,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   end
 
   def select_symbol
-    # current_player[:symbol] = get_valid_input(
+    # current_player[:symbol] = get_valid_value(
     #   prompt: "#{current_player[:name]}, X or 0?",
     #   valid_values: %w[X 0],
     #   invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
@@ -69,9 +69,9 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   end
 
   def play_turn
-    pos = get_valid_input(
+    pos = get_valid_value(
       prompt: "Pick a position #{current_player[:name]}",
-      valid_values: valid_positions.compact,
+      valid_values: valid_positions,
       invalid_msg: 'Sorry, that one is taken.'
     )
     positions[pos.to_i - 1] = current_player[:symbol]
@@ -104,7 +104,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
 
   # Helper Methods
 
-  def get_valid_input(prompt:, valid_values:, invalid_msg:, up_case: false)
+  def get_valid_value(prompt:, valid_values:, invalid_msg:, up_case: false)
     puts prompt
     loop do
       value = up_case ? gets.chomp.upcase : gets.chomp
@@ -121,7 +121,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   def valid_positions
     positions.map do |position|
       position.to_s if position != 'X' && position != '0'
-    end
+    end.compact
   end
 
   # Printer Methods
