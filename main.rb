@@ -51,13 +51,15 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   end
 
   def select_symbol
-    current_player[:symbol] = get_valid_input(
-      "#{current_player[:name]}, X or 0?",
-      %w[X 0],
-      "Sorry, that\'s not valid. Please try again.\n",
-      true
-    )
-    other_player[:symbol] = current_player[:symbol] == 'X' ? '0' : 'X'
+    # current_player[:symbol] = get_valid_input(
+    #   prompt: "#{current_player[:name]}, X or 0?",
+    #   valid_values: %w[X 0],
+    #   invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
+    #   up_case: true
+    # )
+    # other_player[:symbol] = current_player[:symbol] == 'X' ? '0' : 'X'
+    player1[:symbol] = 'X'
+    player2[:symbol] = '0'
     print_separator
   end
 
@@ -67,16 +69,14 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   end
 
   def play_turn
-    puts "Pick a position #{current_player[:name]}"
-    pos = gets.chomp.to_i
-    # Add input (pos) validation loop
-    if valid_position?(pos)
-      positions[pos - 1] = current_player[:symbol]
-    else
-      puts 'Sorry, that one is not valid.' # Needs to loop
-      puts
-    end
+    pos = get_valid_input(
+      prompt: "Pick a position #{current_player[:name]}",
+      valid_values: valid_positions.compact,
+      invalid_msg: 'Sorry, that one is taken.'
+    )
+    positions[pos.to_i - 1] = current_player[:symbol]
     self.current_player = other_player
+    print_separator
   end
 
   def end_game
@@ -104,21 +104,23 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
 
   # Helper Methods
 
-  def other_player
-    current_player == player1 ? player2 : player1
-  end
-
-  def valid_position?(_pos)
-    true
-  end
-
-  def get_valid_input(prompt, valid_values, invalid_msg, up_case)
+  def get_valid_input(prompt:, valid_values:, invalid_msg:, up_case: false)
     puts prompt
     loop do
       value = up_case ? gets.chomp.upcase : gets.chomp
       return value if valid_values.include?(value)
 
       puts invalid_msg
+    end
+  end
+
+  def other_player
+    current_player == player1 ? player2 : player1
+  end
+
+  def valid_positions
+    positions.map do |position|
+      position.to_s if position != 'X' && position != '0'
     end
   end
 
@@ -132,9 +134,10 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
     puts
   end
 
-  def print_score # rubocop:disable Metrics/AbcSize
-    puts "#{current_player == player1 ? '>' : ' '} #{player1[:name]} (#{player1[:symbol]}): #{player1[:score]}"
-    puts "#{current_player == player2 ? '>' : ' '} #{player2[:name]} (#{player2[:symbol]}): #{player2[:score]}"
+  def print_separator
+    puts
+    puts '----------------------'
+    puts
   end
 
   def print_board # rubocop:disable Metrics/AbcSize
@@ -148,10 +151,9 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
     puts
   end
 
-  def print_separator
-    puts
-    puts '----------------------'
-    puts
+  def print_score # rubocop:disable Metrics/AbcSize
+    puts "#{current_player == player1 ? '>' : ' '} #{player1[:name]} (#{player1[:symbol]}): #{player1[:score]}"
+    puts "#{current_player == player2 ? '>' : ' '} #{player2[:name]} (#{player2[:symbol]}): #{player2[:score]}"
   end
 end
 
