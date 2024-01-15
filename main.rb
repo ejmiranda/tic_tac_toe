@@ -24,6 +24,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
       end_game
       break unless play_again?
     end
+    print_banner('Thank you for playing!')
   end
 
   private
@@ -31,7 +32,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   # Game Flow Methods
 
   def set_game
-    print_welcome('Tic Tac Toe')
+    print_banner('Welcome to Tic Tac Toe')
     select_players
     print_separator
   end
@@ -66,19 +67,42 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
     print_separator
   end
 
-  def winner?
-    # Calculate if current player is the winner
-    false
-  end
-
   def play_turn
     pos = get_valid_value(
       prompt: "Pick a position #{current_player[:name]}",
       valid_values: valid_positions,
-      invalid_msg: 'Sorry, that one is taken.'
+      invalid_msg: 'Sorry, try again.'
     )
     positions[pos.to_i - 1] = current_player[:symbol]
     print_separator
+  end
+
+  def valid_positions
+    positions.map do |position|
+      position.to_s if position != 'X' && position != '0'
+    end.compact
+  end
+
+  def winner? # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    winner_combination = Array.new(3, current_player[:symbol])
+    pos = positions
+    # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    # case 1: 1, 2, 3 <- Top Row
+    winner_combination == pos[0..2] ||
+      # case 2: 4, 5, 6 <- Mid Row
+      winner_combination == pos[3..5] ||
+      # case 3: 7, 8, 9 <- Bottom Row
+      winner_combination == pos[6..8] ||
+      # case 4: 1, 4, 7 <- Left Column
+      winner_combination == [pos[0], pos[3], pos[6]] ||
+      # case 5: 2, 5, 8 <- Mid Column
+      winner_combination == [pos[1], pos[4], pos[7]] ||
+      # case 6: 3, 6, 9 <- Right Column
+      winner_combination == [pos[2], pos[5], pos[8]] ||
+      # case 7: 1, 5, 9 <- Top Lef to Bottom Right
+      winner_combination == [pos[0], pos[4], pos[8]] ||
+      # case 8: 3, 5, 7 <- Top Right to Bottom Left
+      winner_combination == [pos[2], pos[4], pos[6]]
   end
 
   def swap_current_player
@@ -122,18 +146,12 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
     current_player == player1 ? player2 : player1
   end
 
-  def valid_positions
-    positions.map do |position|
-      position.to_s if position != 'X' && position != '0'
-    end.compact
-  end
-
   # Printer Methods
 
-  def print_welcome(title)
+  def print_banner(title)
     puts
     puts '----------------------'
-    puts "WELCOME TO #{title.upcase}"
+    puts title.upcase
     puts '----------------------'
     puts
   end
