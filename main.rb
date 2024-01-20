@@ -2,7 +2,7 @@
 
 # The classic paper and pencil game
 class TicTacToe # rubocop:disable Metrics/ClassLength
-  attr_accessor :player1, :player2, :current_player, :positions
+  attr_accessor :player1, :player2, :current_player, :winner, :positions
 
   def initialize
     @player1 = { name: '', score: 0, symbol: '' }
@@ -17,7 +17,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
       loop do
         print_board
         play_turn
-        break if winner? || draw?
+        break if winner? || valid_positions.empty?
 
         swap_current_player
       end
@@ -50,6 +50,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   end
 
   def set_round
+    self.winner = nil
     self.positions = *(1..9)
     select_symbol
   end
@@ -73,7 +74,6 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
       valid_values: valid_positions,
       invalid_msg: 'Sorry, try again.'
     )
-    current_player[:last] = pos.to_i - 1
     positions[pos.to_i - 1] = current_player[:symbol]
     print_separator
   end
@@ -84,26 +84,27 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
     end.compact
   end
 
-  def winner? # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+  def winner? # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength
     winner_combination = Array.new(3, current_player[:symbol])
     pos = positions
     # [1, 2, 3, 4, 5, 6, 7, 8, 9]
     # case 1: 1, 2, 3 <- Top Row
+    self.winner = current_player if
     winner_combination == pos[0..2] ||
-      # case 2: 4, 5, 6 <- Mid Row
-      winner_combination == pos[3..5] ||
-      # case 3: 7, 8, 9 <- Bottom Row
-      winner_combination == pos[6..8] ||
-      # case 4: 1, 4, 7 <- Left Column
-      winner_combination == [pos[0], pos[3], pos[6]] ||
-      # case 5: 2, 5, 8 <- Mid Column
-      winner_combination == [pos[1], pos[4], pos[7]] ||
-      # case 6: 3, 6, 9 <- Right Column
-      winner_combination == [pos[2], pos[5], pos[8]] ||
-      # case 7: 1, 5, 9 <- Top Left to Bottom Right
-      winner_combination == [pos[0], pos[4], pos[8]] ||
-      # case 8: 3, 5, 7 <- Top Right to Bottom Left
-      winner_combination == [pos[2], pos[4], pos[6]]
+    # case 2: 4, 5, 6 <- Mid Row
+    winner_combination == pos[3..5] ||
+    # case 3: 7, 8, 9 <- Bottom Row
+    winner_combination == pos[6..8] ||
+    # case 4: 1, 4, 7 <- Left Column
+    winner_combination == [pos[0], pos[3], pos[6]] ||
+    # case 5: 2, 5, 8 <- Mid Column
+    winner_combination == [pos[1], pos[4], pos[7]] ||
+    # case 6: 3, 6, 9 <- Right Column
+    winner_combination == [pos[2], pos[5], pos[8]] ||
+    # case 7: 1, 5, 9 <- Top Left to Bottom Right
+    winner_combination == [pos[0], pos[4], pos[8]] ||
+    # case 8: 3, 5, 7 <- Top Right to Bottom Left
+    winner_combination == [pos[2], pos[4], pos[6]]
   end
 
   def swap_current_player
@@ -111,9 +112,13 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   end
 
   def end_game
-    update_score
+    update_score unless winner.nil?
     print_board
-    puts "The winner is #{current_player[:name]}!"
+    if !winner.nil?
+      puts "The winner is #{winner[:name]}!"
+    else
+      puts "It's a draw!"
+    end
     puts
   end
 
