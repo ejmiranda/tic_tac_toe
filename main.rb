@@ -17,7 +17,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
       loop do
         print_board
         play_turn
-        break if winner?
+        break if winner? || draw?
 
         swap_current_player
       end
@@ -73,6 +73,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
       valid_values: valid_positions,
       invalid_msg: 'Sorry, try again.'
     )
+    current_player[:last] = pos.to_i - 1
     positions[pos.to_i - 1] = current_player[:symbol]
     print_separator
   end
@@ -99,7 +100,7 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
       winner_combination == [pos[1], pos[4], pos[7]] ||
       # case 6: 3, 6, 9 <- Right Column
       winner_combination == [pos[2], pos[5], pos[8]] ||
-      # case 7: 1, 5, 9 <- Top Lef to Bottom Right
+      # case 7: 1, 5, 9 <- Top Left to Bottom Right
       winner_combination == [pos[0], pos[4], pos[8]] ||
       # case 8: 3, 5, 7 <- Top Right to Bottom Left
       winner_combination == [pos[2], pos[4], pos[6]]
@@ -121,13 +122,12 @@ class TicTacToe # rubocop:disable Metrics/ClassLength
   end
 
   def play_again?
-    input = get_valid_value(
+    get_valid_value(
       prompt: 'Do you want to play again (Y/N)?',
       valid_values: %w[Y N],
       invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
       up_case: true
-    )
-    input == 'Y'
+    ) == 'Y'
   end
 
   # Helper Methods
