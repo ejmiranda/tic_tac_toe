@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-# Someone who plays Tic Tac Toe
+# Any player in any game
 class Player
-  attr_accessor :name, :symbol, :points
+  attr_accessor :name, :id, :points
 
-  def initialize(name = '', symbol = '', points = 0)
+  def initialize(name = '', id = '', points = 0)
     @name = name
-    @symbol = symbol
+    @id = id
     @points = points
   end
 end
