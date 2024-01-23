@@ -7,27 +7,13 @@ class TicTacToe < Game
   attr_reader :player1, :player2
 
   def initialize
-    @player1 = super.Player.new
-    @player2 = super.Player.new
+    super
+    @player1 = Player.new
+    @player2 = Player.new
   end
 
   def start
-    select_players
-  end
-
-  private
-
-  def select_players
-    puts 'Enter the name for Player 1'
-    # player1.name = gets.chomp
-    player1.name = 'Edgar'
-    puts player1.name
-    puts
-    puts 'Enter the name for Player 2'
-    # player2.name = gets.chomp
-    player2.name = 'Lucas'
-    puts player2.name
-    puts
+    select_players([player1, player2])
   end
 end
 
