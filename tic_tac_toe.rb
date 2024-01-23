@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_relative 'player'
+require_relative 'game'
 
 # The classic paper and pencil game
-class TicTacToe
+class TicTacToe < Game
   attr_reader :player1, :player2
 
   def initialize
-    @player1 = Player.new
-    @player2 = Player.new
+    @player1 = super.Player.new
+    @player2 = super.Player.new
   end
 
   def start
@@ -19,10 +19,14 @@ class TicTacToe
 
   def select_players
     puts 'Enter the name for Player 1'
-    player1.name = gets.chomp
+    # player1.name = gets.chomp
+    player1.name = 'Edgar'
+    puts player1.name
     puts
     puts 'Enter the name for Player 2'
-    player2.name = gets.chomp
+    # player2.name = gets.chomp
+    player2.name = 'Lucas'
+    puts player2.name
     puts
   end
 end
