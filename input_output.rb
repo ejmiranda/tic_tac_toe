@@ -19,4 +19,9 @@ module InputOutput
     puts '----------------------'
     puts
   end
+
+  def print_separator
+    puts '----------------------'
+    puts
+  end
 end
