@@ -2,13 +2,28 @@
 
 require_relative 'player'
 
-# Any game
+# Any 2-Player turn based game
 class Game
-  def get_players_names(players:)
+  attr_reader :players
+
+  def initialize(player_qty:)
+    @players = []
+    player_qty.times do
+      @players.push(Player.new)
+    end
+  end
+
+  def play_game; end
+
+  def set_players_names
     players.each_with_index do |player, idx|
       puts "Enter the name for Player #{idx + 1}"
-      player.name = gets.chomp
+      # player.name = gets.chomp
+      player.name = "Player #{idx + 1}"
+      puts player.name
       puts
     end
   end
+
+  def play_round; end
 end
