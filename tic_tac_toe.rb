@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'game'
-require_relative 'input'
+require_relative 'input_output'
 
 # The classic paper and pencil game
 class TicTacToe < Game
-  include Input
+  include InputOutput
 
   attr_reader :player1, :player2
 
@@ -16,8 +16,8 @@ class TicTacToe < Game
   end
 
   def start
-    print_banner('Welcome to Tic Tac Toe')
-    get_players_names([player1, player2])
+    print_banner(text: 'Welcome to Tic Tac Toe')
+    get_players_names(players: [player1, player2])
   end
 
   private
@@ -26,13 +26,6 @@ class TicTacToe < Game
 
   # Printer Methods
 
-  def print_banner(title)
-    puts
-    puts '----------------------'
-    puts title.upcase
-    puts '----------------------'
-    puts
-  end
 end
 
 # class TicTacToe
