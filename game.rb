@@ -42,6 +42,8 @@ class Game
     print_separator
   end
 
+  # Helper Methods
+
   def players
     [player1, player2]
   end
@@ -53,6 +55,8 @@ class Game
   def swap_current_player
     self.current_player = other_player
   end
+
+  # Printer Methods
 
   def print_score # rubocop:disable Metrics/AbcSize
     puts "#{current_player == player1 ? '>' : ' '} #{player1.name} (#{player1.id}): #{player1.points}"
