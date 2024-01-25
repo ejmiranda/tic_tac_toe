@@ -18,6 +18,10 @@ class TicTacToe < Game
   def start
     print_banner('Welcome to Tic Tac Toe')
     get_players_names([player1, player2])
+    loop do
+      play_round
+      break if winner? || valid_positions.empty?
+    end
   end
 
   private
