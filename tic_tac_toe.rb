@@ -7,15 +7,7 @@ require_relative 'input_output'
 class TicTacToe < Game
   include InputOutput
 
-  attr_reader :player1, :player2
-  attr_accessor :current_player, :winner, :positions
-
-  def initialize
-    super(player_qty: 2)
-    @player1 = players[0]
-    @player2 = players[1]
-    @current_player = @player1
-  end
+  attr_accessor :positions
 
   def start
     play_game
@@ -37,31 +29,12 @@ class TicTacToe < Game
     super
     self.winner = nil
     self.positions = *(1..9)
-    set_players_ids
+    set_players_ids(ids: %w[X 0])
     print_board
-  end
-
-  def set_players_ids
-    # current_player.id = get_valid_value(
-    #   prompt: "#{current_player.name}, X or 0?",
-    #   valid_values: %w[X 0],
-    #   invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
-    #   up_case: true
-    # )
-    # other_player.id = current_player.id == 'X' ? '0' : 'X'
-    player1.id = 'X'
-    player2.id = '0'
-    print_separator
   end
 
   def play_again?
     false
-  end
-
-  # Helper Methods
-
-  def other_player
-    current_player == player1 ? player2 : player1
   end
 
   # Printer Methods
@@ -75,11 +48,6 @@ class TicTacToe < Game
     puts '--+---+---'
     puts "#{positions[6]} | #{positions[7]} | #{positions[8]}"
     puts
-  end
-
-  def print_score # rubocop:disable Metrics/AbcSize
-    puts "#{current_player == player1 ? '>' : ' '} #{player1.name} (#{player1.id}): #{player1.points}"
-    puts "#{current_player == player2 ? '>' : ' '} #{player2.name} (#{player2.id}): #{player2.points}"
   end
 end
 
