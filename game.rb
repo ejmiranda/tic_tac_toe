@@ -4,7 +4,7 @@ require_relative 'player'
 
 # Any game
 class Game
-  def select_players(players)
+  def get_players_names(players)
     players.each_with_index do |player, idx|
       puts "Enter the name for Player #{idx + 1}"
       player.name = gets.chomp
