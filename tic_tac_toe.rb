@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
 require_relative 'game'
-require_relative 'input_output'
 
 # The classic paper and pencil game
 class TicTacToe < Game
-  include InputOutput
-
   attr_accessor :positions
 
   def start
@@ -16,9 +13,7 @@ class TicTacToe < Game
   private
 
   def play_game
-    super
-    print_banner(text: 'Welcome to Tic Tac Toe')
-    set_players_names
+    super(name: 'Tic Tac Toe')
     loop do
       play_round
       break unless play_again?
@@ -27,7 +22,7 @@ class TicTacToe < Game
   end
 
   def play_round
-    self.winner = nil
+    super
     self.positions = *(1..9)
     set_players_ids(ids: %w[X 0])
     loop do

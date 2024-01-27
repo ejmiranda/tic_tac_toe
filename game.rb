@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'player'
+require_relative 'input_output'
 
 # Any 2-Player turn-based game
 class Game
+  include InputOutput
+
   attr_reader :player1, :player2
   attr_accessor :current_player, :winner
 
@@ -15,7 +18,10 @@ class Game
 
   private
 
-  def play_game; end
+  def play_game(name:)
+    print_banner(text: "Welcome to #{name}")
+    set_players_names
+  end
 
   def set_players_names
     players.each_with_index do |player, idx|
@@ -27,7 +33,9 @@ class Game
     end
   end
 
-  def play_round; end
+  def play_round
+    self.winner = nil
+  end
 
   def set_players_ids(ids:)
     # current_player.id = get_valid_value(
