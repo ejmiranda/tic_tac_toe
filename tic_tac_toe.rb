@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 require_relative 'game'
+require 'matrix'
 
 # The classic paper and pencil game
 class TicTacToe < Game
   attr_accessor :positions
 
   def start
-    play_game
+    winner?
+    # play_game
   end
 
   private
@@ -52,27 +54,33 @@ class TicTacToe < Game
     end.compact
   end
 
-  def winner? # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
-    winner_combination = Array.new(3, current_player.id)
-    pos = positions
-    # [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    # case 1: 1, 2, 3 <- Top Row
-    self.winner = current_player if
-    winner_combination == pos[0..2] ||
-    # case 2: 4, 5, 6 <- Mid Row
-    winner_combination == pos[3..5] ||
-    # case 3: 7, 8, 9 <- Bottom Row
-    winner_combination == pos[6..8] ||
-    # case 4: 1, 4, 7 <- Left Column
-    winner_combination == [pos[0], pos[3], pos[6]] ||
-    # case 5: 2, 5, 8 <- Mid Column
-    winner_combination == [pos[1], pos[4], pos[7]] ||
-    # case 6: 3, 6, 9 <- Right Column
-    winner_combination == [pos[2], pos[5], pos[8]] ||
-    # case 7: 1, 5, 9 <- Top Left to Bottom Right
-    winner_combination == [pos[0], pos[4], pos[8]] ||
-    # case 8: 3, 5, 7 <- Top Right to Bottom Left
-    winner_combination == [pos[2], pos[4], pos[6]]
+  def winner?
+    pos = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    matrix = Matrix[pos[0..2], pos[3..5], pos[6..9]]
+    p matrix.row_vectors
+    p matrix.column_vectors
+    p matrix.each(:diagonal).to_a
+    p matrix.inverse
+    # winner_combination = Array.new(3, current_player.id)
+    # pos = positions
+    # # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    # # case 1: 1, 2, 3 <- Top Row
+    # self.winner = current_player if
+    # winner_combination == pos[0..2] ||
+    # # case 2: 4, 5, 6 <- Mid Row
+    # winner_combination == pos[3..5] ||
+    # # case 3: 7, 8, 9 <- Bottom Row
+    # winner_combination == pos[6..8] ||
+    # # case 4: 1, 4, 7 <- Left Column
+    # winner_combination == [pos[0], pos[3], pos[6]] ||
+    # # case 5: 2, 5, 8 <- Mid Column
+    # winner_combination == [pos[1], pos[4], pos[7]] ||
+    # # case 6: 3, 6, 9 <- Right Column
+    # winner_combination == [pos[2], pos[5], pos[8]] ||
+    # # case 7: 1, 5, 9 <- Top Left to Bottom Right
+    # winner_combination == [pos[0], pos[4], pos[8]] ||
+    # # case 8: 3, 5, 7 <- Top Right to Bottom Left
+    # winner_combination == [pos[2], pos[4], pos[6]]
   end
 
   def end_round
