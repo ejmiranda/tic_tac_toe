@@ -42,6 +42,17 @@ class Game
     print_separator
   end
 
+  def play_turn; end
+
+  def play_again?
+    get_valid_value(
+      prompt: 'Do you want to play again (Y/N)?',
+      valid_values: %w[Y N],
+      invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
+      up_case: true
+    ) == 'Y'
+  end
+
   # Helper Methods
 
   def players
