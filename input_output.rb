@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Input related methods
-module Input
+# Input/Output related methods
+module InputOutput
   def get_valid_value(prompt:, valid_values:, invalid_msg:, up_case: false)
     puts prompt
     loop do
@@ -10,5 +10,18 @@ module Input
 
       puts invalid_msg
     end
+  end
+
+  def print_banner(text:)
+    puts
+    puts '----------------------'
+    puts text.upcase
+    puts '----------------------'
+    puts
+  end
+
+  def print_separator
+    puts '----------------------'
+    puts
   end
 end

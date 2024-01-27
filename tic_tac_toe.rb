@@ -1,40 +1,52 @@
 # frozen_string_literal: true
 
 require_relative 'game'
-require_relative 'input'
+require_relative 'input_output'
 
 # The classic paper and pencil game
 class TicTacToe < Game
-  include Input
+  include InputOutput
 
-  attr_reader :player1, :player2
-
-  def initialize
-    super
-    @player1 = Player.new
-    @player2 = Player.new
-  end
+  attr_accessor :positions
 
   def start
-    print_banner('Welcome to Tic Tac Toe')
-    get_players_names([player1, player2])
-    loop do
-      play_round
-      break if winner? || valid_positions.empty?
-    end
+    play_game
   end
 
   private
 
-  def play_round; end
+  def play_game
+    super
+    print_banner(text: 'Welcome to Tic Tac Toe')
+    set_players_names
+    loop do
+      play_round
+      break unless play_again?
+    end
+  end
+
+  def play_round
+    super
+    self.winner = nil
+    self.positions = *(1..9)
+    set_players_ids(ids: %w[X 0])
+    print_board
+  end
+
+  def play_again?
+    false
+  end
 
   # Printer Methods
 
-  def print_banner(title)
+  def print_board # rubocop:disable Metrics/AbcSize
+    print_score
     puts
-    puts '----------------------'
-    puts title.upcase
-    puts '----------------------'
+    puts "#{positions[0]} | #{positions[1]} | #{positions[2]}"
+    puts '--+---+---'
+    puts "#{positions[3]} | #{positions[4]} | #{positions[5]}"
+    puts '--+---+---'
+    puts "#{positions[6]} | #{positions[7]} | #{positions[8]}"
     puts
   end
 end
