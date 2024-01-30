@@ -21,6 +21,9 @@ class TicTacToe < Game
     loop do
       play_round
       break unless play_again?
+
+      puts
+      print_separator
     end
     print_banner(text: 'Thank you for playing!')
   end

@@ -26,9 +26,7 @@ class Game
   def set_players_names
     players.each_with_index do |player, idx|
       puts "Enter the name for Player #{idx + 1}"
-      # player.name = gets.chomp
-      player.name = "Player #{idx + 1}"
-      puts player.name
+      player.name = gets.chomp
       puts
     end
   end
@@ -38,15 +36,13 @@ class Game
   end
 
   def set_players_ids(ids:)
-    # current_player.id = get_valid_value(
-    #   prompt: "#{current_player.name}, #{ids.first} or #{ids.last}?",
-    #   valid_values: ids,
-    #   invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
-    #   up_case: true
-    # )
-    # other_player.id = current_player.id == ids.first ? ids.last : ids.first
-    player1.id = 'X'
-    player2.id = '0'
+    current_player.id = get_valid_value(
+      prompt: "#{current_player.name}, #{ids.first} or #{ids.last}?",
+      valid_values: ids,
+      invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
+      up_case: true
+    )
+    other_player.id = current_player.id == ids.first ? ids.last : ids.first
     print_separator
   end
 
