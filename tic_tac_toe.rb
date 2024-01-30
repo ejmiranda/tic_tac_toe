@@ -57,7 +57,7 @@ class TicTacToe < Game
   end
 
   def winner?
-    self.winner = current_player if winner_combinations.any? do |w_comb|
+    self.winner = current_player if WINNER_COMBINATIONS.any? do |w_comb|
       ([positions[w_comb[0]], positions[w_comb[1]], positions[w_comb[2]]].count current_player.id) == 3
     end
   end
@@ -69,6 +69,7 @@ class TicTacToe < Game
       puts "The winner is #{winner.name}!"
     else
       puts "It's a draw!"
+      swap_current_player
     end
     puts
   end
