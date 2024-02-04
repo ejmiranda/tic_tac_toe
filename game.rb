@@ -2,6 +2,7 @@
 
 require_relative 'player'
 require_relative 'input_output'
+require 'colorize'
 
 # Any 2-Player turn-based game
 class Game
@@ -26,7 +27,9 @@ class Game
   def set_players_names
     players.each_with_index do |player, idx|
       puts "Enter the name for Player #{idx + 1}"
-      player.name = gets.chomp
+      # player.name = gets.chomp
+      player.name = "Player #{idx}"
+      puts player.name
       puts
     end
   end
@@ -36,13 +39,15 @@ class Game
   end
 
   def set_players_ids(ids:)
-    current_player.id = get_valid_value(
-      prompt: "#{current_player.name}, #{ids.first} or #{ids.last}?",
-      valid_values: ids,
-      invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
-      up_case: true
-    )
-    other_player.id = current_player.id == ids.first ? ids.last : ids.first
+    # current_player.id = get_valid_value(
+    #   prompt: "#{current_player.name}, #{ids.first} or #{ids.last}?",
+    #   valid_values: ids,
+    #   invalid_msg: "Sorry, that\'s not valid. Please try again.\n",
+    #   up_case: true
+    # )
+    # other_player.id = current_player.id == ids.first ? ids.last : ids.first
+    current_player.id = 'X'
+    other_player.id = '0'
     print_separator
   end
 
@@ -74,7 +79,7 @@ class Game
   # Printer Methods
 
   def print_score # rubocop:disable Metrics/AbcSize
-    puts "#{current_player == player1 ? '>' : ' '} #{player1.name} (#{player1.id}): #{player1.points}"
-    puts "#{current_player == player2 ? '>' : ' '} #{player2.name} (#{player2.id}): #{player2.points}"
+    puts "#{current_player == player1 ? '>' : ' '} #{player1.name} (" + player1.id.to_s.colorize(:red) + "): #{player1.points}"
+    puts "#{current_player == player2 ? '>' : ' '} #{player2.name} (" + player2.id.to_s.colorize(:blue) + "): #{player2.points}"
   end
 end

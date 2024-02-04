@@ -30,7 +30,8 @@ class TicTacToe < Game
 
   def play_round
     super
-    self.positions = *(1..9)
+    # self.positions = *(1..9)
+    self.positions = ['X', 2, 3, 4, '0', 6, '0', 8, 9]
     set_players_ids(ids: %w[X 0])
     loop do
       print_board
@@ -83,14 +84,27 @@ class TicTacToe < Game
 
   # Printer Methods
 
-  def print_board # rubocop:disable Metrics/AbcSize
+  def print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     print_score
     puts
-    puts "#{positions[0]} | #{positions[1]} | #{positions[2]}"
-    puts '--+---+---'
-    puts "#{positions[3]} | #{positions[4]} | #{positions[5]}"
-    puts '--+---+---'
-    puts "#{positions[6]} | #{positions[7]} | #{positions[8]}"
-    puts
+    positions.each_with_index do |pos, idx|
+      puts "\n--+---+---" if !idx.zero? && (idx % 3).zero?
+      if pos == 'X'
+        print pos.colorize(:red)
+      elsif pos == '0'
+        print pos.colorize(:blue)
+      else
+        print pos
+      end
+      print ' | '
+    end
+    puts "\n\n"
+    # puts
+    # puts "#{positions[0]} | #{positions[1]} | #{positions[2]}"
+    # puts '--+---+---'
+    # puts "#{positions[3]} | #{positions[4]} | #{positions[5]}"
+    # puts '--+---+---'
+    # puts "#{positions[6]} | #{positions[7]} | #{positions[8]}"
+    # puts
   end
 end
