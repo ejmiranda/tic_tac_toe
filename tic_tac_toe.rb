@@ -10,6 +10,11 @@ class TicTacToe < Game
     [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
   ].freeze
 
+  COLORS = {
+    'X': :red,
+    '0': :blue
+  }.freeze
+
   def start
     play_game
   end
@@ -30,8 +35,7 @@ class TicTacToe < Game
 
   def play_round
     super
-    # self.positions = *(1..9)
-    self.positions = ['X', 2, 3, 4, '0', 6, '0', 8, 9]
+    self.positions = *(1..9)
     set_players_ids(ids: %w[X 0])
     loop do
       print_board
@@ -66,11 +70,11 @@ class TicTacToe < Game
     end
   end
 
-  def end_round
+  def end_round # rubocop:disable Metrics/AbcSize
     update_score unless winner.nil?
     print_board
     if !winner.nil?
-      puts "The winner is #{winner.name}!"
+      puts "The winner is #{winner.name}!".colorize(COLORS[winner.id.to_sym])
     else
       puts "It's a draw!"
       swap_current_player
@@ -84,27 +88,24 @@ class TicTacToe < Game
 
   # Printer Methods
 
-  def print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+  def print_board # rubocop:disable Metrics/AbcSize
     print_score
-    puts
     positions.each_with_index do |pos, idx|
       puts "\n--+---+---" if !idx.zero? && (idx % 3).zero?
-      if pos == 'X'
-        print pos.colorize(:red)
-      elsif pos == '0'
-        print pos.colorize(:blue)
-      else
-        print pos
-      end
-      print ' | '
+      print pos.to_s.colorize(COLORS[pos.to_s.to_sym])
+      print ' | ' unless ((idx + 1) % 3).zero?
     end
     puts "\n\n"
-    # puts
-    # puts "#{positions[0]} | #{positions[1]} | #{positions[2]}"
-    # puts '--+---+---'
-    # puts "#{positions[3]} | #{positions[4]} | #{positions[5]}"
-    # puts '--+---+---'
-    # puts "#{positions[6]} | #{positions[7]} | #{positions[8]}"
-    # puts
+  end
+
+  def print_score
+    players.each do |player|
+      print "#{current_player == player ? '>' : ' '} "
+      print "#{player.name} "
+      print "(#{player.id.colorize(COLORS[player.id.to_sym])})"
+      print ": #{player.points}"
+      puts
+    end
+    puts
   end
 end
