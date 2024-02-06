@@ -1,6 +1,6 @@
 ## Tic Tac Toe
 
-[![Run on Repl.it](https://replit.com/badge/github/ejmiranda/tic_tac_toe)](https://replit.com/github/ejmiranda/tic_tac_toe)
+[![Run on Repl.it](https://replit.com/badge/github/ejmiranda/tic_tac_toe)](https://replit.com/@ejmiranda/tictactoe)
 
 **Description:**
 - From The Odin Project's [Curriculum](https://www.theodinproject.com/lessons/ruby-tic-tac-toe).
